@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Elan Life Crafting Calculator</title>
+  <title>Black Shadow's Crafting Calculator</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -24,10 +24,19 @@
       border-radius: 8px;
       white-space: pre-wrap;
     }
+    #recipeContainer h3 {
+      margin-top: 1em;
+      color: #2a9d8f;
+      font-size: 1.2em;
+    }
+    .recipe {
+      padding-left: 1em;
+    }
   </style>
 </head>
 <body>
-  <h1>🔧 Elan Life Crafting Calculator</h1>
+  <h1>🔧 Black Shadow's Crafting Calculator</h1>
+
   <label for="item">Choose item:</label><br>
   <select id="item">
     <option value="">-- Select an item --</option>
@@ -53,145 +62,59 @@
     <option value="Ural Transport Truck">Ural Transport Truck</option>
     <option value="Ural Canopy">Ural Canopy</option>
   </select><br>
+
   <label for="qty">Quantity:</label><br>
   <input type="number" id="qty" value="1" min="1"><br>
+
+  <label for="sortType">Sort Recipes:</label><br>
+  <select id="sortType" onchange="handleSortChange()">
+    <option value="none">-- No Sorting --</option>
+    <option value="alphabetical">Sort by Type (A–Z)</option>
+    <option value="grouped">Group by Type</option>
+  </select><br>
+
   <button onclick="calculate()">Calculate</button>
   <div class="output" id="output"></div>
-<script>
-const baseMaterials = {
-  "Cloth": { "Fabric": 1, "Polyester": 1 },
-  "Iron Plate": { "Iron Ingot": 1, "Fabric": 1, "Polyester": 1 },
-  "Component": { "Iron Ingot": 1, "Copper Ingot": 1 },
-  "Tempered Glass": { "Glass": 2, "Polyester": 1 },
-  "Weapon Part": { "Iron Ingot": 1, "Copper Ingot": 1 },
-  "Stabilizer": { "Iron Ingot": 2, "Gold Ingot": 1 },
-  "Attachment Part": { "Copper Ingot": 2, "Silver Ingot": 1 },
-  "Ammunition": { "Iron Ingot": 1, "Charcoal": 1 },
-  "Mechanical Component": { "Iron Ingot": 2, "Copper Ingot": 2 },
-  "Engine Part": { "Iron Ingot": 1, "Copper Ingot": 1, "Fuel Canister": 1 },
-  "Interior Part": { "Fabric": 2, "Polyester": 2 },
-  "Rotor": { "Charcoal": 1, "Polyester": 1 },
-  "Kevlar": { "Iron Plate": 1, "Iron Ingot": 20 },
-  "Component (HQ)": { "Component": 2, "Gold Ingot": 15 },
-  "Weapon Part (HQ)": { "Weapon Part": 3, "Iron Ingot": 15, "Copper Ingot": 16 },
-  "Stabilizer (HQ)": { "Stabilizer": 3, "Polyester": 15 },
-  "Attachment Part (HQ)": { "Attachment Part": 3, "Wooden Plank": 15 },
-  "Ammo (HQ)": { "Ammunition": 3, "Fuel Canister": 1 },
-  "Mechanical Component (HQ)": { "Mechanical Component": 9, "Gold Ingot": 45 },
-  "Engine Part (HQ)": { "Engine Part": 9, "Copper Ingot": 45, "Fuel Canister": 45 },
-  "Interior Part (HQ)": { "Interior Part": 9, "Wooden Plank": 45 },
-  "Rotor (HQ)": { "Rotor": 9, "Silver Ingot": 30 }
-};
 
-const recipes = {
-  "PM Pistol": { "Weapon Part": 4, "Stabilizer": 2, "Attachment Part": 2, "multiplier": 400 },
-  "M9 Pistol": { "Weapon Part": 5, "Stabilizer": 3, "Attachment Part": 3, "multiplier": 400 },
-  "Colt 1911 Pistol": { "Weapon Part": 5, "Stabilizer": 3, "Attachment Part": 3, "multiplier": 400 },
-  "M16A2 Rifle": { "Weapon Part": 27, "Stabilizer": 15, "Attachment Part": 17, "multiplier": 400 },
-  "MP5A2 Sub-Machine Gun": { "Weapon Part": 15, "Stabilizer": 8, "Attachment Part": 9, "multiplier": 400 },
-  "M151A2 Off-Road": { "Mechanical Component": 1, "Interior Part": 0, "Engine Part": 1, "multiplier": 20 },
-  "UH-1 Helicopter": { "Mechanical Component (HQ)": 19, "Interior Part (HQ)": 17, "Engine Part (HQ)": 12, "Rotor (HQ)": 30, "Special Rotor": 1, "multiplier": 20 },
-  "MI-8 Helicopter": { "Mechanical Component (HQ)": 30, "Interior Part (HQ)": 27, "Engine Part (HQ)": 19, "Rotor (HQ)": 48, "Special Rotor": 1, "multiplier": 20 },
-  "S105 Car (Blue)": { "Mechanical Component": 3, "Interior Part": 2, "Engine Part": 3, "multiplier": 20 },
-  "S1203 Lab": { "Mechanical Component": 41, "Interior Part": 25, "Engine Part": 41, "multiplier": 20 },
-  "S1203 Minibus": { "Mechanical Component": 7, "Interior Part": 4, "Engine Part": 7, "multiplier": 20 },
-  "UAZ-452 Van": { "Mechanical Component": 3, "Interior Part": 2, "Engine Part": 3, "multiplier": 20 },
-  "M998 L.U.V": { "Mechanical Component": 5, "Interior Part": 3, "Engine Part": 5, "multiplier": 20 },
-  "M998 L.U.V (Canopy)": { "Mechanical Component": 6, "Interior Part": 4, "Engine Part": 6, "multiplier": 20 },
-  "M1025 Light-Armoured Vehicle": { "Mechanical Component": 9, "Interior Part": 5, "Engine Part": 9, "multiplier": 20 },
-  "PickUp Truck": { "Mechanical Component": 19, "Interior Part": 11, "Engine Part": 19, "multiplier": 20 },
-  "VW Golf": { "Mechanical Component": 31, "Interior Part": 19, "Engine Part": 31, "multiplier": 20 },
-  "M923A1 Transport Truck (Canopy)": { "Mechanical Component (HQ)": 2, "Interior Part (HQ)": 2, "Engine Part (HQ)": 1, "multiplier": 20 },
-  "Ural Fuel Truck": { "Mechanical Component (HQ)": 4, "Interior Part (HQ)": 3, "Engine Part (HQ)": 2, "multiplier": 20 },
-  "Ural Transport Truck": { "Mechanical Component (HQ)": 4, "Interior Part (HQ)": 3, "Engine Part (HQ)": 2, "multiplier": 20 },
-  "Ural Canopy": { "Mechanical Component (HQ)": 5, "Interior Part (HQ)": 5, "Engine Part (HQ)": 3, "multiplier": 20 }
-  <label for="sortType">Sort Recipes:</label>
-<select id="sortType" onchange="handleSortChange()">
-  <option value="none">-- No Sorting --</option>
-  <option value="alphabetical">Sort by Type (A–Z)</option>
-  <option value="grouped">Group by Type</option>
-</select>
-  function sortRecipesByType(recipes) {
-  return recipes.slice().sort((a, b) => a.type.localeCompare(b.type));
-}
+  <script>
+    const baseMaterials = {
+      "Cloth": { "Fabric": 1, "Polyester": 1 },
+      "Iron Plate": { "Iron Ingot": 1, "Fabric": 1, "Polyester": 1 },
+      "Component": { "Iron Ingot": 1, "Copper Ingot": 1 },
+      "Tempered Glass": { "Glass": 2, "Polyester": 1 },
+      "Weapon Part": { "Iron Ingot": 1, "Copper Ingot": 1 },
+      "Stabilizer": { "Iron Ingot": 2, "Gold Ingot": 1 },
+      "Attachment Part": { "Copper Ingot": 2, "Silver Ingot": 1 },
+      "Ammunition": { "Iron Ingot": 1, "Charcoal": 1 },
+      "Mechanical Component": { "Iron Ingot": 2, "Copper Ingot": 2 },
+      "Engine Part": { "Iron Ingot": 1, "Copper Ingot": 1, "Fuel Canister": 1 },
+      "Interior Part": { "Fabric": 2, "Polyester": 2 },
+      "Rotor": { "Charcoal": 1, "Polyester": 1 },
+      "Kevlar": { "Iron Plate": 1, "Iron Ingot": 20 },
+      "Component (HQ)": { "Component": 2, "Gold Ingot": 15 },
+      "Weapon Part (HQ)": { "Weapon Part": 3, "Iron Ingot": 15, "Copper Ingot": 16 },
+      "Stabilizer (HQ)": { "Stabilizer": 3, "Polyester": 15 },
+      "Attachment Part (HQ)": { "Attachment Part": 3, "Wooden Plank": 15 },
+      "Ammo (HQ)": { "Ammunition": 3, "Fuel Canister": 1 },
+      "Mechanical Component (HQ)": { "Mechanical Component": 9, "Gold Ingot": 45 },
+      "Engine Part (HQ)": { "Engine Part": 9, "Copper Ingot": 45, "Fuel Canister": 45 },
+      "Interior Part (HQ)": { "Interior Part": 9, "Wooden Plank": 45 },
+      "Rotor (HQ)": { "Rotor": 9, "Silver Ingot": 30 }
+    };
 
-function groupRecipesByType(recipes) {
-  const grouped = {};
-  recipes.forEach(recipe => {
-    if (!grouped[recipe.type]) grouped[recipe.type] = [];
-    grouped[recipe.type].push(recipe);
-  });
-  return grouped;
-  function renderGroupedRecipes(grouped) {
-  const container = document.getElementById("recipeContainer");
-  container.innerHTML = "";
-
-  for (const type in grouped) {
-    const header = document.createElement("h3");
-    header.textContent = type;
-    container.appendChild(header);
-
-    grouped[type].forEach(recipe => {
-      const div = document.createElement("div");
-      div.className = "recipe";
-      div.textContent = recipe.name;
-      container.appendChild(div);
-    });
-  }
-}
-  function handleSortChange() {
-  const value = document.getElementById("sortType").value;
-
-  if (value === "alphabetical") {
-    const sorted = sortRecipesByType(recipes);
-    renderRecipes(sorted);
-  } else if (value === "grouped") {
-    const grouped = groupRecipesByType(recipes);
-    renderGroupedRecipes(grouped);
-  } else {
-    renderRecipes(recipes); // default
-  }
-}
-  #recipeContainer h3 {
-  margin-top: 1em;
-  color: #2a9d8f;
-  font-size: 1.2em;
-}
-.recipe {
-  padding-left: 1em;
-}
-}
-};
-function calculate() {
-  const item = document.getElementById("item").value;
-  const qty = parseInt(document.getElementById("qty").value);
-  const recipe = recipes[item];
-  const output = [];
-  const rawTotals = {};
-
-  if (!recipe) {
-    document.getElementById("output").innerText = "❌ Item not found or not selected.";
-    return;
-  }
-
-  output.push(`🔩 Materials for ${qty} × ${item}:\n`);
-
-  for (const [part, count] of Object.entries(recipe)) {
-    if (part !== "multiplier") {
-      const total = count * qty * recipe.multiplier;
-      output.push(`${part}: ${total}`);
-
-      if (baseMaterials[part]) {
-        for (const [raw, rawCount] of Object.entries(baseMaterials[part])) {
-          rawTotals[raw] = (rawTotals[raw] || 0) + rawCount * total;
-        }
-      }
-    }
-  }
-
-  output.push(`\n🧱 Raw Materials Needed:\n`);
-  for (const [raw, total] of Object.entries(rawTotals)) {
-    output.push(`${raw}: ${total}`);
-  }
-
+    const recipes = {
+      "PM Pistol": { type: "Infantry", "Weapon Part": 4, "Stabilizer": 2, "Attachment Part": 2, multiplier: 400 },
+      "M9 Pistol": { type: "Infantry", "Weapon Part": 5, "Stabilizer": 3, "Attachment Part": 3, multiplier: 400 },
+      "Colt 1911 Pistol": { type: "Infantry", "Weapon Part": 5, "Stabilizer": 3, "Attachment Part": 3, multiplier: 400 },
+      "M16A2 Rifle": { type: "Infantry", "Weapon Part": 27, "Stabilizer": 15, "Attachment Part": 17, multiplier: 400 },
+      "MP5A2 Sub-Machine Gun": { type: "Infantry", "Weapon Part": 15, "Stabilizer": 8, "Attachment Part": 9, multiplier: 400 },
+      "M151A2 Off-Road": { type: "Vehicle", "Mechanical Component": 1, "Interior Part": 0, "Engine Part": 1, multiplier: 20 },
+      "UH-1 Helicopter": { type: "Aircraft", "Mechanical Component (HQ)": 19, "Interior Part (HQ)": 17, "Engine Part (HQ)": 12, "Rotor (HQ)": 30, "Special Rotor": 1, multiplier: 20 },
+      "MI-8 Helicopter": { type: "Aircraft", "Mechanical Component (HQ)": 30, "Interior Part (HQ)": 27, "Engine Part (HQ)": 19, "Rotor (HQ)": 48, "Special Rotor": 1, multiplier: 20 },
+      "S105 Car (Blue)": { type: "Vehicle", "Mechanical Component": 3, "Interior Part": 2, "Engine Part": 3, multiplier: 20 },
+      "S1203 Lab": { type: "Vehicle", "Mechanical Component": 41, "Interior Part": 25, "Engine Part": 41, multiplier: 20 },
+      "S1203 Minibus": { type: "Vehicle", "Mechanical Component": 7, "Interior Part": 4, "Engine Part": 7, multiplier: 20 },
+      "UAZ-452 Van": { type: "Vehicle", "Mechanical Component": 3, "Interior Part": 2, "Engine Part": 3, multiplier: 20 },
+      "M998 L.U.V": { type: "Vehicle", "Mechanical Component": 5, "Interior Part": 3, "Engine Part": 5, multiplier: 20 },
+      "M998 L.U.V (Canopy)": { type: "Vehicle", "Mechanical Component": 6, "Interior Part": 4, "Engine Part": 
   
