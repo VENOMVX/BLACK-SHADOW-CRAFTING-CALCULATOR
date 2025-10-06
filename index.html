@@ -105,6 +105,62 @@ const recipes = {
   "Ural Fuel Truck": { "Mechanical Component (HQ)": 4, "Interior Part (HQ)": 3, "Engine Part (HQ)": 2, "multiplier": 20 },
   "Ural Transport Truck": { "Mechanical Component (HQ)": 4, "Interior Part (HQ)": 3, "Engine Part (HQ)": 2, "multiplier": 20 },
   "Ural Canopy": { "Mechanical Component (HQ)": 5, "Interior Part (HQ)": 5, "Engine Part (HQ)": 3, "multiplier": 20 }
+  <label for="sortType">Sort Recipes:</label>
+<select id="sortType" onchange="handleSortChange()">
+  <option value="none">-- No Sorting --</option>
+  <option value="alphabetical">Sort by Type (A–Z)</option>
+  <option value="grouped">Group by Type</option>
+</select>
+  function sortRecipesByType(recipes) {
+  return recipes.slice().sort((a, b) => a.type.localeCompare(b.type));
+}
+
+function groupRecipesByType(recipes) {
+  const grouped = {};
+  recipes.forEach(recipe => {
+    if (!grouped[recipe.type]) grouped[recipe.type] = [];
+    grouped[recipe.type].push(recipe);
+  });
+  return grouped;
+  function renderGroupedRecipes(grouped) {
+  const container = document.getElementById("recipeContainer");
+  container.innerHTML = "";
+
+  for (const type in grouped) {
+    const header = document.createElement("h3");
+    header.textContent = type;
+    container.appendChild(header);
+
+    grouped[type].forEach(recipe => {
+      const div = document.createElement("div");
+      div.className = "recipe";
+      div.textContent = recipe.name;
+      container.appendChild(div);
+    });
+  }
+}
+  function handleSortChange() {
+  const value = document.getElementById("sortType").value;
+
+  if (value === "alphabetical") {
+    const sorted = sortRecipesByType(recipes);
+    renderRecipes(sorted);
+  } else if (value === "grouped") {
+    const grouped = groupRecipesByType(recipes);
+    renderGroupedRecipes(grouped);
+  } else {
+    renderRecipes(recipes); // default
+  }
+}
+  #recipeContainer h3 {
+  margin-top: 1em;
+  color: #2a9d8f;
+  font-size: 1.2em;
+}
+.recipe {
+  padding-left: 1em;
+}
+}
 };
 function calculate() {
   const item = document.getElementById("item").value;
