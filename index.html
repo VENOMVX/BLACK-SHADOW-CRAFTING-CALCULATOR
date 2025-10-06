@@ -136,6 +136,9 @@
       }
     }
 
+    // FIXED CALCULATION LOGIC:
+    // Now uses craftsNeeded = ceil(qty / multiplier)
+    // Each part: total = count * craftsNeeded
     function calculate() {
       const item = document.getElementById("item").value;
       const qty = parseInt(document.getElementById("qty").value);
@@ -148,11 +151,13 @@
         return;
       }
 
-      output.push(`🔩 Materials for ${qty} × ${item}:\n`);
+      const craftsNeeded = Math.ceil(qty / recipe.multiplier);
+
+      output.push(`🔩 Materials for ${qty} × ${item} (Requires ${craftsNeeded} craft${craftsNeeded > 1 ? 's' : ''}, ${recipe.multiplier} per craft):\n`);
 
       for (const [part, count] of Object.entries(recipe)) {
         if (part !== "multiplier" && part !== "type") {
-          const total = count * qty * recipe.multiplier;
+          const total = count * craftsNeeded;
           output.push(`${part}: ${total}`);
           if (baseMaterials[part]) {
             for (const [raw, rawCount] of Object.entries(baseMaterials[part])) {
