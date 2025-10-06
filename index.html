@@ -102,7 +102,7 @@
     <div class="output" id="output"></div>
   </div>
   <script>
-    // Recipes for ALL items in dropdown. Weapons now use: Weapon Part, Stabilizer, Component
+    // Recipes for ALL items in dropdown, including special rotor for helicopters
     const recipes = {
       // Weapons
       "PM Pistol": { type: "Weapon", "Weapon Part": 2, "Stabilizer": 1, "Component": 1 },
@@ -112,8 +112,8 @@
       "MP5A2 Sub-Machine Gun": { type: "Weapon", "Weapon Part": 6, "Stabilizer": 3, "Component": 3 },
       // Vehicles
       "M151A2 Off-Road": { type: "Vehicle", "Mechanical Component": 8, "Interior Part": 5, "Engine Part": 8 },
-      "UH-1 Helicopter": { type: "Vehicle", "Mechanical Component": 12, "Interior Part": 9, "Engine Part": 12 },
-      "MI-8 Helicopter": { type: "Vehicle", "Mechanical Component": 18, "Interior Part": 13, "Engine Part": 18 },
+      "UH-1 Helicopter": { type: "Vehicle", "Mechanical Component": 12, "Interior Part": 9, "Engine Part": 12, "Special Rotor": 1 },
+      "MI-8 Helicopter": { type: "Vehicle", "Mechanical Component": 18, "Interior Part": 13, "Engine Part": 18, "Special Rotor": 1 },
       "S105 Car (Blue)": { type: "Vehicle", "Mechanical Component": 14, "Interior Part": 8, "Engine Part": 14 },
       "S1203 Lab": { type: "Vehicle", "Mechanical Component": 16, "Interior Part": 10, "Engine Part": 16 },
       "S1203 Minibus": { type: "Vehicle", "Mechanical Component": 17, "Interior Part": 11, "Engine Part": 17 },
@@ -128,11 +128,11 @@
       "Ural Fuel Truck": { type: "HQ Part", "Mechanical Component (HQ)": 4, "Interior Part (HQ)": 3, "Engine Part (HQ)": 2 },
       "Ural Transport Truck": { type: "HQ Part", "Mechanical Component (HQ)": 4, "Interior Part (HQ)": 3, "Engine Part (HQ)": 2 },
       "Ural Canopy": { type: "HQ Part", "Mechanical Component (HQ)": 5, "Interior Part (HQ)": 5, "Engine Part (HQ)": 3 },
-      // Helmets (sample numbers, update as needed!)
+      // Helmets
       "Ballistic Helmet": { type: "Armor", "Helmet Shell": 1, "Helmet Liner": 1, "Interior Part": 1 },
       "Assault Helmet": { type: "Armor", "Helmet Shell": 2, "Helmet Liner": 2, "Interior Part": 2 },
       "Heavy Assault Helmet": { type: "Armor", "Helmet Shell": 3, "Helmet Liner": 2, "Interior Part": 2 },
-      // Vests (sample numbers, update as needed!)
+      // Vests
       "Light Vest": { type: "Armor", "Vest Plate": 2, "Vest Fabric": 3, "Interior Part": 1 },
       "Heavy Vest": { type: "Armor", "Vest Plate": 4, "Vest Fabric": 5, "Interior Part": 2 },
       "Assault Vest": { type: "Armor", "Vest Plate": 3, "Vest Fabric": 4, "Interior Part": 2 }
