@@ -57,13 +57,15 @@
     <h1>🔧 Black Shadow's Crafting Calculator</h1>
 
     <label for="item">Choose item:</label><br>
-    <select id="item" onchange="calculate()">
+    <select id="item" onchange="handleItemChange(); calculate();">
       <option value="">-- Select an item --</option>
+      <!-- Weapons -->
       <option value="PM Pistol">PM Pistol</option>
       <option value="M9 Pistol">M9 Pistol</option>
       <option value="Colt 1911 Pistol">Colt 1911 Pistol</option>
       <option value="M16A2 Rifle">M16A2 Rifle</option>
       <option value="MP5A2 Sub-Machine Gun">MP5A2 Sub-Machine Gun</option>
+      <!-- Vehicles -->
       <option value="M151A2 Off-Road">M151A2 Off-Road</option>
       <option value="UH-1 Helicopter">UH-1 Helicopter</option>
       <option value="MI-8 Helicopter">MI-8 Helicopter</option>
@@ -76,16 +78,20 @@
       <option value="M1025 Light-Armoured Vehicle">M1025 Light-Armoured Vehicle</option>
       <option value="PickUp Truck">PickUp Truck</option>
       <option value="VW Golf">VW Golf</option>
+      <!-- Trucks -->
       <option value="M923A1 Transport Truck (Canopy)">M923A1 Transport Truck (Canopy)</option>
       <option value="Ural Fuel Truck">Ural Fuel Truck</option>
       <option value="Ural Transport Truck">Ural Transport Truck</option>
       <option value="Ural Canopy">Ural Canopy</option>
+      <!-- Helmets -->
       <option value="Ballistic Helmet">Ballistic Helmet</option>
       <option value="Assault Helmet">Assault Helmet</option>
       <option value="Heavy Assault Helmet">Heavy Assault Helmet</option>
+      <!-- Vests -->
       <option value="Light Vest">Light Vest</option>
       <option value="Heavy Vest">Heavy Vest</option>
       <option value="Assault Vest">Assault Vest</option>
+      <option value="Plate Carrier Vest">Plate Carrier Vest</option>
     </select><br>
 
     <label for="qty">Quantity:</label><br>
@@ -102,7 +108,8 @@
     <div class="output" id="output"></div>
   </div>
   <script>
-    // Recipes for ALL items in dropdown, including special rotor for helicopters
+    // Recipes for all items in dropdown.
+    // Vests and helmets only display Cloth and Iron Plate; Plate Carrier Vest shows Kevlar too.
     const recipes = {
       // Weapons
       "PM Pistol": { type: "Weapon", "Weapon Part": 2, "Stabilizer": 1, "Component": 1 },
@@ -123,20 +130,54 @@
       "M1025 Light-Armoured Vehicle": { type: "Vehicle", "Mechanical Component": 9, "Interior Part": 5, "Engine Part": 9 },
       "PickUp Truck": { type: "Vehicle", "Mechanical Component": 19, "Interior Part": 11, "Engine Part": 19 },
       "VW Golf": { type: "Vehicle", "Mechanical Component": 31, "Interior Part": 19, "Engine Part": 31 },
-      // HQ/Truck Parts
-      "M923A1 Transport Truck (Canopy)": { type: "HQ Part", "Mechanical Component (HQ)": 2, "Interior Part (HQ)": 2, "Engine Part (HQ)": 1 },
-      "Ural Fuel Truck": { type: "HQ Part", "Mechanical Component (HQ)": 4, "Interior Part (HQ)": 3, "Engine Part (HQ)": 2 },
-      "Ural Transport Truck": { type: "HQ Part", "Mechanical Component (HQ)": 4, "Interior Part (HQ)": 3, "Engine Part (HQ)": 2 },
-      "Ural Canopy": { type: "HQ Part", "Mechanical Component (HQ)": 5, "Interior Part (HQ)": 5, "Engine Part (HQ)": 3 },
-      // Helmets
-      "Ballistic Helmet": { type: "Armor", "Helmet Shell": 1, "Helmet Liner": 1, "Interior Part": 1 },
-      "Assault Helmet": { type: "Armor", "Helmet Shell": 2, "Helmet Liner": 2, "Interior Part": 2 },
-      "Heavy Assault Helmet": { type: "Armor", "Helmet Shell": 3, "Helmet Liner": 2, "Interior Part": 2 },
-      // Vests
-      "Light Vest": { type: "Armor", "Vest Plate": 2, "Vest Fabric": 3, "Interior Part": 1 },
-      "Heavy Vest": { type: "Armor", "Vest Plate": 4, "Vest Fabric": 5, "Interior Part": 2 },
-      "Assault Vest": { type: "Armor", "Vest Plate": 3, "Vest Fabric": 4, "Interior Part": 2 }
+      // Trucks
+      "M923A1 Transport Truck (Canopy)": { type: "Truck", "Mechanical Component (HQ)": 2, "Interior Part (HQ)": 2, "Engine Part (HQ)": 1 },
+      "Ural Fuel Truck": { type: "Truck", "Mechanical Component (HQ)": 4, "Interior Part (HQ)": 3, "Engine Part (HQ)": 2 },
+      "Ural Transport Truck": { type: "Truck", "Mechanical Component (HQ)": 4, "Interior Part (HQ)": 3, "Engine Part (HQ)": 2 },
+      "Ural Canopy": { type: "Truck", "Mechanical Component (HQ)": 5, "Interior Part (HQ)": 5, "Engine Part (HQ)": 3 },
+      // Helmets (only display Cloth and Iron Plate)
+      "Ballistic Helmet": { type: "Helmet", "Cloth": 2, "Iron Plate": 1 },
+      "Assault Helmet": { type: "Helmet", "Cloth": 3, "Iron Plate": 2 },
+      "Heavy Assault Helmet": { type: "Helmet", "Cloth": 4, "Iron Plate": 3 },
+      // Vests (only display Cloth and Iron Plate, Plate Carrier Vest includes Kevlar)
+      "Light Vest": { type: "Vest", "Cloth": 5, "Iron Plate": 2 },
+      "Heavy Vest": { type: "Vest", "Cloth": 8, "Iron Plate": 4 },
+      "Assault Vest": { type: "Vest", "Cloth": 6, "Iron Plate": 3 },
+      "Plate Carrier Vest": { type: "Vest", "Cloth": 10, "Iron Plate": 5, "Kevlar": 2 }
     };
+
+    // Max quantities for item categories
+    const itemMaxQuantities = {
+      "Weapon": 100,
+      "Vehicle": 50,
+      "Truck": 50,
+      "Helmet": 100,
+      "Vest": 100
+    };
+
+    function getItemCategory(item) {
+      // Returns the category string for the item based on recipes.type
+      return recipes[item]?.type || null;
+    }
+
+    function handleItemChange() {
+      const item = document.getElementById("item").value;
+      const qtyInput = document.getElementById("qty");
+      if (!item) {
+        qtyInput.max = 100; // default max
+        return;
+      }
+      const type = getItemCategory(item);
+      if (type && itemMaxQuantities[type]) {
+        qtyInput.max = itemMaxQuantities[type];
+      } else {
+        qtyInput.max = 100; // fallback default
+      }
+      // If current value exceeds new max, set to max
+      if (parseInt(qtyInput.value) > parseInt(qtyInput.max)) {
+        qtyInput.value = qtyInput.max;
+      }
+    }
 
     function sortRecipesByType(recipesObj) {
       return Object.entries(recipesObj)
@@ -201,10 +242,24 @@
 
       output.push(`🔩 Materials for ${qty} × ${item}:\n`);
 
-      for (const [part, count] of Object.entries(recipe)) {
-        if (part !== "type") {
-          const total = count * qty;
-          output.push(`${part}: ${total}`);
+      // For helmets, only display Cloth and Iron Plate
+      if (recipe.type === "Helmet") {
+        if (recipe["Cloth"]) output.push(`Cloth: ${recipe["Cloth"] * qty}`);
+        if (recipe["Iron Plate"]) output.push(`Iron Plate: ${recipe["Iron Plate"] * qty}`);
+      }
+      // For vests, only display Cloth and Iron Plate, Plate Carrier Vest adds Kevlar
+      else if (recipe.type === "Vest") {
+        if (recipe["Cloth"]) output.push(`Cloth: ${recipe["Cloth"] * qty}`);
+        if (recipe["Iron Plate"]) output.push(`Iron Plate: ${recipe["Iron Plate"] * qty}`);
+        if (item === "Plate Carrier Vest" && recipe["Kevlar"]) output.push(`Kevlar: ${recipe["Kevlar"] * qty}`);
+      }
+      // Otherwise display all parts
+      else {
+        for (const [part, count] of Object.entries(recipe)) {
+          if (part !== "type") {
+            const total = count * qty;
+            output.push(`${part}: ${total}`);
+          }
         }
       }
 
@@ -213,6 +268,7 @@
 
     window.onload = () => {
       renderRecipes(Object.entries(recipes).map(([name, data]) => ({ name, ...data })));
+      handleItemChange();
     };
   </script>
 </body>
