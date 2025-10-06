@@ -40,19 +40,6 @@
   <label for="item">Choose item:</label><br>
   <select id="item" onchange="calculate()">
     <option value="">-- Select an item --</option>
-    <option value="PM Pistol">PM Pistol</option>
-    <option value="M9 Pistol">M9 Pistol</option>
-    <option value="Colt 1911 Pistol">Colt 1911 Pistol</option>
-    <option value="M16A2 Rifle">M16A2 Rifle</option>
-    <option value="MP5A2 Sub-Machine Gun">MP5A2 Sub-Machine Gun</option>
-    <option value="M151A2 Off-Road">M151A2 Off-Road</option>
-    <option value="UH-1 Helicopter">UH-1 Helicopter</option>
-    <option value="MI-8 Helicopter">MI-8 Helicopter</option>
-    <option value="S105 Car (Blue)">S105 Car (Blue)</option>
-    <option value="S1203 Lab">S1203 Lab</option>
-    <option value="S1203 Minibus">S1203 Minibus</option>
-    <option value="UAZ-452 Van">UAZ-452 Van</option>
-    <option value="M998 L.U.V">M998 L.U.V</option>
     <option value="M998 L.U.V (Canopy)">M998 L.U.V (Canopy)</option>
     <option value="M1025 Light-Armoured Vehicle">M1025 Light-Armoured Vehicle</option>
     <option value="PickUp Truck">PickUp Truck</option>
@@ -77,7 +64,18 @@
   <div class="output" id="output"></div>
 
   <script>
-        const recipes = {
+    // Raw material breakdown for each part type
+    const baseMaterials = {
+      "Mechanical Component": { "Steel": 5, "Rubber": 2 },
+      "Interior Part": { "Plastic": 3, "Fabric": 4 },
+      "Engine Part": { "Steel": 10, "Copper": 6 },
+      "Mechanical Component (HQ)": { "Steel": 7, "Rubber": 3 },
+      "Interior Part (HQ)": { "Plastic": 5, "Fabric": 6 },
+      "Engine Part (HQ)": { "Steel": 12, "Copper": 8 }
+    };
+
+    // Recipes for each craftable item
+    const recipes = {
       "M998 L.U.V (Canopy)": { type: "Vehicle", "Mechanical Component": 6, "Interior Part": 4, "Engine Part": 6, multiplier: 20 },
       "M1025 Light-Armoured Vehicle": { type: "Vehicle", "Mechanical Component": 9, "Interior Part": 5, "Engine Part": 9, multiplier: 20 },
       "PickUp Truck": { type: "Vehicle", "Mechanical Component": 19, "Interior Part": 11, "Engine Part": 19, multiplier: 20 },
