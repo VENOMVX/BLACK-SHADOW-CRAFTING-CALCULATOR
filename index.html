@@ -8,6 +8,26 @@
       background-color: #121212;
       color: #eee;
       padding: 20px;
+      /* Background image */
+      background-image: url('https://cdn.cloudflare.steamstatic.com/steam/apps/1874880/header.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      /* Optional: add a dark overlay for readability */
+      position: relative;
+      min-height: 100vh;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(18,18,18,0.7); /* dark overlay */
+      z-index: 0;
+      pointer-events: none;
+    }
+    #content {
+      position: relative;
+      z-index: 1;
     }
     h1 {
       color: #00ffcc;
@@ -35,6 +55,7 @@
   </style>
 </head>
 <body>
+  <div id="content">
   <h1>🔧 Black Shadow's Crafting Calculator</h1>
 
   <label for="item">Choose item:</label><br>
@@ -62,18 +83,8 @@
 
   <button onclick="calculate()">Calculate</button>
   <div class="output" id="output"></div>
-
+  </div>
   <script>
-    // Raw material breakdown for each part type
-    const baseMaterials = {
-      "Mechanical Component": { "Steel": 5, "Rubber": 2 },
-      "Interior Part": { "Plastic": 3, "Fabric": 4 },
-      "Engine Part": { "Steel": 10, "Copper": 6 },
-      "Mechanical Component (HQ)": { "Steel": 7, "Rubber": 3 },
-      "Interior Part (HQ)": { "Plastic": 5, "Fabric": 6 },
-      "Engine Part (HQ)": { "Steel": 12, "Copper": 8 }
-    };
-
     // Recipes for each craftable item
     const recipes = {
       "M998 L.U.V (Canopy)": { type: "Vehicle", "Mechanical Component": 6, "Interior Part": 4, "Engine Part": 6, multiplier: 20 },
@@ -136,15 +147,12 @@
       }
     }
 
-    // FIXED CALCULATION LOGIC:
-    // Now uses craftsNeeded = ceil(qty / multiplier)
-    // Each part: total = count * craftsNeeded
+    // Updated calculation: Only show part counts, no raw breakdown
     function calculate() {
       const item = document.getElementById("item").value;
       const qty = parseInt(document.getElementById("qty").value);
       const recipe = recipes[item];
       const output = [];
-      const rawTotals = {};
 
       if (!recipe) {
         document.getElementById("output").innerText = "❌ Item not found or not selected.";
@@ -159,17 +167,7 @@
         if (part !== "multiplier" && part !== "type") {
           const total = count * craftsNeeded;
           output.push(`${part}: ${total}`);
-          if (baseMaterials[part]) {
-            for (const [raw, rawCount] of Object.entries(baseMaterials[part])) {
-              rawTotals[raw] = (rawTotals[raw] || 0) + rawCount * total;
-            }
-          }
         }
-      }
-
-      output.push(`\n🧱 Raw Materials Needed:\n`);
-      for (const [raw, total] of Object.entries(rawTotals)) {
-        output.push(`${raw}: ${total}`);
       }
 
       document.getElementById("output").innerText = output.join("\n");
