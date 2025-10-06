@@ -1,10 +1,7 @@
-
-
-
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Black Shadow Elites Crafting Calculator</title>
+  <title>Elan Life Crafting Calculator</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -30,22 +27,36 @@
   </style>
 </head>
 <body>
-  <h1>🔧 Black Shadow Elites Crafting Calculator</h1>
+  <h1>🔧 Elan Life Crafting Calculator</h1>
   <label for="item">Choose item:</label><br>
   <select id="item">
+    <option value="">-- Select an item --</option>
     <option value="PM Pistol">PM Pistol</option>
     <option value="M9 Pistol">M9 Pistol</option>
     <option value="Colt 1911 Pistol">Colt 1911 Pistol</option>
     <option value="M16A2 Rifle">M16A2 Rifle</option>
     <option value="MP5A2 Sub-Machine Gun">MP5A2 Sub-Machine Gun</option>
     <option value="M151A2 Off-Road">M151A2 Off-Road</option>
-    <!-- More items will be added in Part 2 -->
+    <option value="UH-1 Helicopter">UH-1 Helicopter</option>
+    <option value="MI-8 Helicopter">MI-8 Helicopter</option>
+    <option value="S105 Car (Blue)">S105 Car (Blue)</option>
+    <option value="S1203 Lab">S1203 Lab</option>
+    <option value="S1203 Minibus">S1203 Minibus</option>
+    <option value="UAZ-452 Van">UAZ-452 Van</option>
+    <option value="M998 L.U.V">M998 L.U.V</option>
+    <option value="M998 L.U.V (Canopy)">M998 L.U.V (Canopy)</option>
+    <option value="M1025 Light-Armoured Vehicle">M1025 Light-Armoured Vehicle</option>
+    <option value="PickUp Truck">PickUp Truck</option>
+    <option value="VW Golf">VW Golf</option>
+    <option value="M923A1 Transport Truck (Canopy)">M923A1 Transport Truck (Canopy)</option>
+    <option value="Ural Fuel Truck">Ural Fuel Truck</option>
+    <option value="Ural Transport Truck">Ural Transport Truck</option>
+    <option value="Ural Canopy">Ural Canopy</option>
   </select><br>
   <label for="qty">Quantity:</label><br>
   <input type="number" id="qty" value="1" min="1"><br>
   <button onclick="calculate()">Calculate</button>
   <div class="output" id="output"></div>
-
 <script>
 const baseMaterials = {
   "Cloth": { "Fabric": 1, "Polyester": 1 },
@@ -60,16 +71,16 @@ const baseMaterials = {
   "Engine Part": { "Iron Ingot": 1, "Copper Ingot": 1, "Fuel Canister": 1 },
   "Interior Part": { "Fabric": 2, "Polyester": 2 },
   "Rotor": { "Charcoal": 1, "Polyester": 1 },
-  "Kevlar": { "Iron Plate": 1, "Iron Ingot": 20 }
+  "Kevlar": { "Iron Plate": 1, "Iron Ingot": 20 },
   "Component (HQ)": { "Component": 2, "Gold Ingot": 15 },
-"Weapon Part (HQ)": { "Weapon Part": 3, "Iron Ingot": 15, "Copper Ingot": 16 },
-"Stabilizer (HQ)": { "Stabilizer": 3, "Polyester": 15 },
-"Attachment Part (HQ)": { "Attachment Part": 3, "Wooden Plank": 15 },
-"Ammo (HQ)": { "Ammunition": 3, "Fuel Canister": 1 },
-"Mechanical Component (HQ)": { "Mechanical Component": 9, "Gold Ingot": 45 },
-"Engine Part (HQ)": { "Engine Part": 9, "Copper Ingot": 45, "Fuel Canister": 45 },
-"Interior Part (HQ)": { "Interior Part": 9, "Wooden Plank": 45 },
-"Rotor (HQ)": { "Rotor": 9, "Silver Ingot": 30 }
+  "Weapon Part (HQ)": { "Weapon Part": 3, "Iron Ingot": 15, "Copper Ingot": 16 },
+  "Stabilizer (HQ)": { "Stabilizer": 3, "Polyester": 15 },
+  "Attachment Part (HQ)": { "Attachment Part": 3, "Wooden Plank": 15 },
+  "Ammo (HQ)": { "Ammunition": 3, "Fuel Canister": 1 },
+  "Mechanical Component (HQ)": { "Mechanical Component": 9, "Gold Ingot": 45 },
+  "Engine Part (HQ)": { "Engine Part": 9, "Copper Ingot": 45, "Fuel Canister": 45 },
+  "Interior Part (HQ)": { "Interior Part": 9, "Wooden Plank": 45 },
+  "Rotor (HQ)": { "Rotor": 9, "Silver Ingot": 30 }
 };
 
 const recipes = {
@@ -78,54 +89,57 @@ const recipes = {
   "Colt 1911 Pistol": { "Weapon Part": 5, "Stabilizer": 3, "Attachment Part": 3, "multiplier": 400 },
   "M16A2 Rifle": { "Weapon Part": 27, "Stabilizer": 15, "Attachment Part": 17, "multiplier": 400 },
   "MP5A2 Sub-Machine Gun": { "Weapon Part": 15, "Stabilizer": 8, "Attachment Part": 9, "multiplier": 400 },
-  "M151A2 Off-Road": { "Mechanical Component": 1, "Interior Part": 0, "Engine Part": 1, "multiplier": 20 }
-  // More recipes will be added in Part 2
-}
-
-// Continuing inside <script> tag from Part 1
-
-  
-  "SA-58V": { "Weapon Part (HQ)": 2, "Stabilizer (HQ)": 2, "Attachment Part (HQ)": 2, "multiplier": 400 },
-  "Sig MCX Spear (Black)": { "Weapon Part (HQ)": 2, "Stabilizer (HQ)": 2, "Attachment Part (HQ)": 3, "multiplier": 400 },
-  "SR25 (Black)": { "Weapon Part (HQ)": 2, "Stabilizer (HQ)": 2, "Attachment Part (HQ)": 3, "multiplier": 400 },
-  "SVD Sniper Rifle": { "Weapon Part (HQ)": 6, "Stabilizer (HQ)": 6, "Attachment Part (HQ)": 7, "multiplier": 400 },
-  "CheyTac M200 Intervention": { "Weapon Part (HQ)": 4, "Stabilizer (HQ)": 4, "Attachment Part (HQ)": 5, "Special Gun Barrel": 1, "multiplier": 400 },
-  "PM MAG": { "Ammunition": 1, "multiplier": 400 },
-  "M9 MAG": { "Ammunition": 1, "multiplier": 400 },
-  ".45 ACP MAG": { "Ammunition": 1, "multiplier": 400 },
-  "MP5 9x19 MAG": { "Ammunition": 1, "multiplier": 400 },
-  "MP7 4.6x40 MAG": { "Ammunition": 1, "multiplier": 400 },
-  "5.56x45mm STANAG 30RND MAG": { "Ammunition": 1, "multiplier": 400 },
-  ".300 Blackout MAG": { "Ammunition": 2, "multiplier": 400 },
-  "5.45x39mm 30rnd AK MAG": { "Ammunition": 2, "multiplier": 400 },
-  "SPEAR 6.8x51 25rnd MAG": { "Ammo (HQ)": 1, "multiplier": 400 },
-  "5.45x39mm 45rnd RPK-74 MAG": { "Ammo (HQ)": 1, "multiplier": 400 },
-  "SVD Sniper MAG": { "Ammo (HQ)": 1, "multiplier": 400 },
-  "M249 Belt MAG": { "Ammo (HQ)": 7, "multiplier": 400 },
-  "SR25 7.62x51 20rnd MAG": { "Ammo (HQ)": 1, "multiplier": 400 },
-  "7.62x54mm PK-M Belt MAG": { "Ammo (HQ)": 10, "multiplier": 400 },
-  "EOTECH XPS3": { "Component": 2, "Tempered Glass": 1, "multiplier": 400 },
-  "4x20 Carry Handle Scope (Olive)": { "Component": 4, "Tempered Glass": 1, "multiplier": 400 },
-  "Elcan Specter (Black)": { "Component": 5, "Tempered Glass": 2, "multiplier": 400 },
-  "Carry Handle Red Dot Sight (Camo)": { "Component": 5, "Tempered Glass": 2, "multiplier": 400 },
-  "PSO-1 Scope": { "Component": 4, "Tempered Glass": 1, "multiplier": 400 },
-  "ADA Assault Pack": { "Cloth": 32, "multiplier": 400 },
-  "F2 Bergan": { "Cloth": 32, "multiplier": 400 },
-  "IIFS Large BackPack": { "Cloth": 32, "multiplier": 400 },
-  "Officer's Cap": { "Cloth": 64, "multiplier": 400 },
-  "6B2 Vest": { "Iron Plate": 4, "Cloth": 6, "multiplier": 400 },
-  "M69 Vest": { "Iron Plate": 10, "Cloth": 14, "multiplier": 400 },
-  "PASGT Vest": { "Iron Plate": 10, "Cloth": 14, "multiplier": 400 },
-  "Plate Carrier Vest": { "Kevlar": 3, "multiplier": 400 },
-  "PASGT Helmet": { "Iron Plate": 2, "Cloth": 2, "multiplier": 400 },
-  "SSH-68 Helmet": { "Iron Plate": 2, "Cloth": 2, "multiplier": 400 },
-  "ZSH-5 Helmet": { "Iron Plate": 7, "Cloth": 10, "multiplier": 400 }
+  "M151A2 Off-Road": { "Mechanical Component": 1, "Interior Part": 0, "Engine Part": 1, "multiplier": 20 },
+  "UH-1 Helicopter": { "Mechanical Component (HQ)": 19, "Interior Part (HQ)": 17, "Engine Part (HQ)": 12, "Rotor (HQ)": 30, "Special Rotor": 1, "multiplier": 20 },
+  "MI-8 Helicopter": { "Mechanical Component (HQ)": 30, "Interior Part (HQ)": 27, "Engine Part (HQ)": 19, "Rotor (HQ)": 48, "Special Rotor": 1, "multiplier": 20 },
+  "S105 Car (Blue)": { "Mechanical Component": 3, "Interior Part": 2, "Engine Part": 3, "multiplier": 20 },
+  "S1203 Lab": { "Mechanical Component": 41, "Interior Part": 25, "Engine Part": 41, "multiplier": 20 },
+  "S1203 Minibus": { "Mechanical Component": 7, "Interior Part": 4, "Engine Part": 7, "multiplier": 20 },
+  "UAZ-452 Van": { "Mechanical Component": 3, "Interior Part": 2, "Engine Part": 3, "multiplier": 20 },
+  "M998 L.U.V": { "Mechanical Component": 5, "Interior Part": 3, "Engine Part": 5, "multiplier": 20 },
+  "M998 L.U.V (Canopy)": { "Mechanical Component": 6, "Interior Part": 4, "Engine Part": 6, "multiplier": 20 },
+  "M1025 Light-Armoured Vehicle": { "Mechanical Component": 9, "Interior Part": 5, "Engine Part": 9, "multiplier": 20 },
+  "PickUp Truck": { "Mechanical Component": 19, "Interior Part": 11, "Engine Part": 19, "multiplier": 20 },
+  "VW Golf": { "Mechanical Component": 31, "Interior Part": 19, "Engine Part": 31, "multiplier": 20 },
+  "M923A1 Transport Truck (Canopy)": { "Mechanical Component (HQ)": 2, "Interior Part (HQ)": 2, "Engine Part (HQ)": 1, "multiplier": 20 },
+  "Ural Fuel Truck": { "Mechanical Component (HQ)": 4, "Interior Part (HQ)": 3, "Engine Part (HQ)": 2, "multiplier": 20 },
+  "Ural Transport Truck": { "Mechanical Component (HQ)": 4, "Interior Part (HQ)": 3, "Engine Part (HQ)": 2, "multiplier": 20 },
+  "Ural Canopy": { "Mechanical Component (HQ)": 5, "Interior Part (HQ)": 5, "Engine Part (HQ)": 3, "multiplier": 20 }
 };
-
 function calculate() {
   const item = document.getElementById("item").value;
   const qty = parseInt(document.getElementById("qty").value);
   const recipe = recipes[item];
   const output = [];
-  0 0 (const [part, cou
+  const rawTotals = {};
 
+  if (!recipe) {
+    document.getElementById("output").innerText = "❌ Item not found or not selected.";
+    return;
+  }
+
+  output.push(`🔩 Materials for ${qty} × ${item}:\n`);
+
+  for (const [part, count] of Object.entries(recipe)) {
+    if (part !== "multiplier") {
+      const total = count * qty * recipe.multiplier;
+      output.push(`${part}: ${total}`);
+
+      if (baseMaterials[part]) {
+        for (const [raw, rawCount] of Object.entries(baseMaterials[part])) {
+          rawTotals[raw] = (rawTotals[raw] || 0) + rawCount * total;
+        }
+      }
+    }
+  }
+
+  output.push(`\n🧱 Raw Materials Needed:\n`);
+  for (const [raw, total] of Object.entries(rawTotals)) {
+    output.push(`${raw}: ${total}`);
+  }
+
+  document.getElementById("output").innerText = output.join("\n");
+}
+</script>
+</body>
+</html>
