@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Elan Life Crafting Calculator</title>
+  <title>Black Shadow Elites Crafting Calculator</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -30,7 +30,7 @@
   </style>
 </head>
 <body>
-  <h1>🔧 Elan Life Crafting Calculator</h1>
+  <h1>🔧 Black Shadow Elites Crafting Calculator</h1>
   <label for="item">Choose item:</label><br>
   <select id="item">
     <option value="PM Pistol">PM Pistol</option>
@@ -61,6 +61,15 @@ const baseMaterials = {
   "Interior Part": { "Fabric": 2, "Polyester": 2 },
   "Rotor": { "Charcoal": 1, "Polyester": 1 },
   "Kevlar": { "Iron Plate": 1, "Iron Ingot": 20 }
+  "Component (HQ)": { "Component": 2, "Gold Ingot": 15 },
+"Weapon Part (HQ)": { "Weapon Part": 3, "Iron Ingot": 15, "Copper Ingot": 16 },
+"Stabilizer (HQ)": { "Stabilizer": 3, "Polyester": 15 },
+"Attachment Part (HQ)": { "Attachment Part": 3, "Wooden Plank": 15 },
+"Ammo (HQ)": { "Ammunition": 3, "Fuel Canister": 1 },
+"Mechanical Component (HQ)": { "Mechanical Component": 9, "Gold Ingot": 45 },
+"Engine Part (HQ)": { "Engine Part": 9, "Copper Ingot": 45, "Fuel Canister": 45 },
+"Interior Part (HQ)": { "Interior Part": 9, "Wooden Plank": 45 },
+"Rotor (HQ)": { "Rotor": 9, "Silver Ingot": 30 }
 };
 
 const recipes = {
@@ -71,11 +80,11 @@ const recipes = {
   "MP5A2 Sub-Machine Gun": { "Weapon Part": 15, "Stabilizer": 8, "Attachment Part": 9, "multiplier": 400 },
   "M151A2 Off-Road": { "Mechanical Component": 1, "Interior Part": 0, "Engine Part": 1, "multiplier": 20 }
   // More recipes will be added in Part 2
-};
+}
 
 // Continuing inside <script> tag from Part 1
 
-  // Add more recipes here
+  
   "SA-58V": { "Weapon Part (HQ)": 2, "Stabilizer (HQ)": 2, "Attachment Part (HQ)": 2, "multiplier": 400 },
   "Sig MCX Spear (Black)": { "Weapon Part (HQ)": 2, "Stabilizer (HQ)": 2, "Attachment Part (HQ)": 3, "multiplier": 400 },
   "SR25 (Black)": { "Weapon Part (HQ)": 2, "Stabilizer (HQ)": 2, "Attachment Part (HQ)": 3, "multiplier": 400 },
@@ -118,31 +127,5 @@ function calculate() {
   const qty = parseInt(document.getElementById("qty").value);
   const recipe = recipes[item];
   const output = [];
-  const rawTotals = {};
-
-  output.push(`🔩 Materials for ${qty} × ${item}:\n`);
-
-  for (const [part, count] of Object.entries(recipe)) {
-    if (part !== "multiplier") {
-      const total = count * qty * recipe.multiplier;
-      output.push(`${part}: ${total}`);
-
-      if (baseMaterials[part]) {
-        for (const [raw, rawCount] of Object.entries(baseMaterials[part])) {
-          rawTotals[raw] = (rawTotals[raw] || 0) + rawCount * total;
-        }
-      }
-    }
-  }
-
-  output.push(`\n🧱 Raw Materials Needed:\n`);
-  for (const [raw, total] of Object.entries(rawTotals)) {
-    output.push(`${raw}: ${total}`);
-  }
-
-  document.getElementById("output").innerText = output.join("\n");
-}
-</script>
-</body>
-</html>
+  0 0 (const [part, cou
 
