@@ -37,6 +37,28 @@
       margin-bottom: 20px;
       margin-top: 0;
     }
+    .btn {
+      display: inline-block;
+      padding: 12px 36px;
+      font-size: 1.1em;
+      font-family: 'Pricedown', Arial, sans-serif;
+      color: #fff;
+      background: linear-gradient(90deg,#00ffcc 0%,#ffe900 100%);
+      border: none;
+      border-radius: 10px;
+      letter-spacing: 2px;
+      text-shadow: 2px 2px 0 #333, 4px 4px 0 #111;
+      cursor: pointer;
+      margin-bottom: 18px;
+      margin-top: 0;
+      box-shadow: 0 2px 12px #00000077;
+      transition: transform 0.1s;
+      text-decoration: none;
+    }
+    .btn:hover {
+      transform: scale(1.045);
+      background: linear-gradient(90deg,#ffe900 0%,#00ffcc 100%);
+    }
     select, input, button {
       padding: 8px;
       margin: 10px 0;
@@ -61,6 +83,7 @@
 </head>
 <body>
   <div id="content">
+    <a href="intro.html" class="btn">⏪ Back to Intro</a>
     <h1>🔧 Black Shadow's Crafting Calculator</h1>
 
     <label for="item">Choose item:</label><br>
