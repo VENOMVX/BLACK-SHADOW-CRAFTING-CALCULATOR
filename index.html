@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html>
-<head><meta http-equiv="refresh" content="0; url=intro.html">
+<head><script>
+  // Only redirect if not arriving from the intro page
+  if (!window.location.search.includes('from=intro')) {
+    window.location.href = "intro.html";
+  }
+</script>
   <title>Black Shadow's Crafting Calculator</title>
   <link href="https://fonts.cdnfonts.com/css/pricedown" rel="stylesheet">
   <style>
