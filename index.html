@@ -100,6 +100,18 @@
       <option value="Colt 1911 Pistol">Colt 1911 Pistol</option>
       <option value="M16A2 Rifle">M16A2 Rifle</option>
       <option value="MP5A2 Sub-Machine Gun">MP5A2 Sub-Machine Gun</option>
+      <option value="M16 Carbine">M16 Carbine</option>
+      <option value="Steyr AUG - Sand">Steyr AUG - Sand</option>
+      <option value="SIG MCX - Khaki">SIG MCX - khaki</option>
+      <option value="SA-58V">SA-58V</option>
+      <option value="SIG MCX SPEAR - BLACK">SIG MCX SPEAR - BLACK</option>
+      <option value="SR25-Black">SR25-Black</option>
+      <option value="SVD">SVD</option>
+      <option value="CheyTac M200 Intervention">CheyTac M200 Intervention</option>
+      
+      
+      
+      
       <!-- Vehicles -->
       <option value="M151A2 Off-Road">M151A2 Off-Road</option>
       <option value="UH-1 Helicopter">UH-1 Helicopter</option>
@@ -119,13 +131,13 @@
       <option value="Ural Transport Truck">Ural Transport Truck</option>
       <option value="Ural Canopy">Ural Canopy</option>
       <!-- Helmets -->
-      <option value="Ballistic Helmet">Ballistic Helmet</option>
-      <option value="Assault Helmet">Assault Helmet</option>
-      <option value="Heavy Assault Helmet">Heavy Assault Helmet</option>
+      <option value="PASGT Helmet">PASGT Helmet</option>
+      <option value="SSH-68 Helmet">SSH-68 Helmet</option>
+      <option value="ZSH-5 Helmet">ZSH-5 Helmet</option>
       <!-- Vests -->
-      <option value="Light Vest">Light Vest</option>
-      <option value="Heavy Vest">Heavy Vest</option>
-      <option value="Assault Vest">Assault Vest</option>
+      <option value="6B2 Vest">6B2 Vest</option>
+      <option value="M69 Vest">M69 Vest</option>
+      <option value="PASGT Vest">PASGT Vest</option>
       <option value="Plate Carrier Vest">Plate Carrier Vest</option>
     </select><br>
 
@@ -147,15 +159,29 @@
     // Vests and helmets only display Cloth and Iron Plate; Plate Carrier Vest shows Kevlar too.
     const recipes = {
       // Weapons
-      "PM Pistol": { type: "Weapon", "Weapon Part": 4, "Stabilizer": 2, "Component": 2 },
-      "M9 Pistol": { type: "Weapon", "Weapon Part": 5, "Stabilizer": 3, "Component": 3 },
-      "Colt 1911 Pistol": { type: "Weapon", "Weapon Part": 5, "Stabilizer": 3, "Component": 3 },
-      "M16A2 Rifle": { type: "Weapon", "Weapon Part": 27, "Stabilizer": 15, "Component": 17 },
-      "MP5A2 Sub-Machine Gun": { type: "Weapon", "Weapon Part": 15, "Stabilizer": 8, "Component": 9 },
+      "PM Pistol": { type: "Weapon", "Weapon Part": 4, "Stabilizer": 2, "Attachment Part": 2 },
+      "M9 Pistol": { type: "Weapon", "Weapon Part": 5, "Stabilizer": 3, "Attachment Part": 3 },
+      "Colt 1911 Pistol": { type: "Weapon", "Weapon Part": 5, "Stabilizer": 3, "Attachment Part": 3 },
+      "M16A2 Rifle": { type: "Weapon", "Weapon Part": 27, "Stabilizer": 15, "Attachment Part": 17 },
+      "MP5A2 Sub-Machine Gun": { type: "Weapon", "Weapon Part": 15, "Stabilizer": 8, "Attachment Part": 9 },
+      "M16 Carbine": { type: "Weapon", "Weapon Part": 29, "Stabilizer": 16, "Attachment Part": 18 },
+      "Steyr AUG - Sand": { type: "Weapon", "Weapon Part": 33, "Stabilizer": 18, "Attachment Part": 20 },
+      "SIG MCX - Khaki": { type: "Weapon", "Weapon Part": 38, "Stabilizer": 20, "Attachment Part": 23 },
+      "SA-58V": { type: "Weapon", "Weapon Part (HQ)": 2, "Stabilizer (HQ)": 2, "Attachment Part (HQ)": 2 },
+      "SIG MCX SPEAR - BLACK": { type: "Weapon", "Weapon Part (HQ)": 2, "Stabilizer (HQ)": 2, "Attachment Part (HQ)": 3 },
+      "SR25-Black": { type: "Weapon", "Weapon Part (HQ)": 2, "Stabilizer (HQ)": 2, "Attachment Part (HQ)": 3 },
+      "SVD": { type: "Weapon", "Weapon Part (HQ)": 6, "Stabilizer (HQ)": 6, "Attachment Part (HQ)": 7 },
+      "CheyTac M200 Intervention": { type: "Weapon", "Weapon Part (HQ)": 4, "Stabilizer (HQ)": 4, "Attachment Part (HQ)": 5, "Special Gun Barrel": 1 },
+      
+      
+      
+      
+      
+      
       // Vehicles
       "M151A2 Off-Road": { type: "Vehicle", "Mechanical Component": 1, "Interior Part": 0, "Engine Part": 1 },
-      "UH-1 Helicopter": { type: "Vehicle", "Mechanical Component": 19, "Interior Part": 17, "Engine Part": 12, "Special Rotor": 1 },
-      "MI-8 Helicopter": { type: "Vehicle", "Mechanical Component": 30, "Interior Part": 27, "Engine Part": 19, "Special Rotor": 1 },
+      "UH-1 Helicopter": { type: "Vehicle", "Mechanical Component (HQ)": 19, "Interior Part (HQ)": 17, "Engine Part (HQ)": 12, "Special Rotor": 1 },
+      "MI-8 Helicopter": { type: "Vehicle", "Mechanical Component (HQ)": 30, "Interior Part (HQ)": 27, "Engine Part (HQ)": 19, "Special Rotor": 1 },
       "S105 Car (Blue)": { type: "Vehicle", "Mechanical Component": 3, "Interior Part": 2, "Engine Part": 3 },
       "S1203 Lab": { type: "Vehicle", "Mechanical Component": 41, "Interior Part": 25, "Engine Part": 41 },
       "S1203 Minibus": { type: "Vehicle", "Mechanical Component": 7, "Interior Part": 4, "Engine Part": 7 },
@@ -171,14 +197,14 @@
       "Ural Transport Truck": { type: "Truck", "Mechanical Component (HQ)": 4, "Interior Part (HQ)": 3, "Engine Part (HQ)": 2 },
       "Ural Canopy": { type: "Truck", "Mechanical Component (HQ)": 5, "Interior Part (HQ)": 5, "Engine Part (HQ)": 3 },
       // Helmets (only display Cloth and Iron Plate)
-      "Ballistic Helmet": { type: "Helmet", "Cloth": 2, "Iron Plate": 1 },
-      "Assault Helmet": { type: "Helmet", "Cloth": 3, "Iron Plate": 2 },
-      "Heavy Assault Helmet": { type: "Helmet", "Cloth": 4, "Iron Plate": 3 },
+      "PASGT Helmet": { type: "Helmet", "Cloth": 2, "Iron Plate": 2 },
+      "SSH-68 Helmet": { type: "Helmet", "Cloth": 2, "Iron Plate": 2 },
+      "ZSH-5 Helmet": { type: "Helmet", "Cloth": 2, "Iron Plate": 2 },
       // Vests (only display Cloth and Iron Plate, Plate Carrier Vest includes Kevlar)
-      "Light Vest": { type: "Vest", "Cloth": 5, "Iron Plate": 2 },
-      "Heavy Vest": { type: "Vest", "Cloth": 8, "Iron Plate": 4 },
-      "Assault Vest": { type: "Vest", "Cloth": 6, "Iron Plate": 3 },
-      "Plate Carrier Vest": { type: "Vest", "Cloth": 10, "Iron Plate": 5, "Kevlar": 2 }
+      "6B2 Vest": { type: "Vest", "Cloth": 6, "Iron Plate": 4 },
+      "M69 Vest": { type: "Vest", "Cloth": 14, "Iron Plate": 10 },
+      "PASGT Vest": { type: "Vest", "Cloth": 14, "Iron Plate": 10 },
+      "Plate Carrier Vest": { type: "Vest", "Kevlar": 3 }
     };
 
     // Max quantities for item categories
